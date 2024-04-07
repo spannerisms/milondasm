@@ -1,0 +1,9 @@
+*.nes
+*.lnk
+*.jar
+*.zip
+resources/*
+test/*
+bin/*
+music/*.log
+music/*.mid
