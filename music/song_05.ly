@@ -206,6 +206,7 @@ music = <<
 		fs'8
 		g'16
 		r
+
 		fs8
 		as
 		fs'

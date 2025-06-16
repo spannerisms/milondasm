@@ -435,10 +435,10 @@ NMI:
 #_81AB: JSR FlushCamera
 #_81AE: JSR RefreshGFXBank
 
+;---------------------------------------------------------------------------------------------------
+
 #_81B1: LDA.b #$04
 #_81B3: STA.b $1A
-
-;---------------------------------------------------------------------------------------------------
 
 #_81B5: LDY.b $18
 
@@ -2409,7 +2409,7 @@ AnimateDeath:
 #_8BC0: STA.b $3C
 #_8BC2: STA.b $49
 
-#_8BC4: LDA.b #$10 ; fly up for 16 frames
+#_8BC4: LDA.b #$10
 #_8BC6: STA.b $48
 
 #_8BC8: LDA.b #$0A ; SONG 0A
@@ -4636,6 +4636,7 @@ DrawOrchestralObject:
 #_9601: STA.b $12
 
 #_9603: JSR GetVRAMofTileFromXY
+
 #_9606: LDA.b $2B
 #_9608: ASL A
 #_9609: ASL A
@@ -5414,6 +5415,8 @@ HandleMoneyHoneyCollection:
 ; So this BNE is actually meant to be a BRA
 #_9A20: INC.w $07BD
 #_9A23: BNE .no_moneycomb
+
+;---------------------------------------------------------------------------------------------------
 
 .honeycomb
 #_9A25: JSR PerformCollectionJingle
@@ -9708,7 +9711,7 @@ DrawShopDollarSigns:
 #_ADC8: LDX.w $07D4
 
 #_ADCB: LDA.w ShopItem1,X
-#_ADCE: BMI .this_never_happens ; TODO ???
+#_ADCE: BMI .this_never_happens ; ???
 
 #_ADD0: LDA.b #$00
 
@@ -21254,7 +21257,11 @@ GFXBanks:
 #_E4FA: db $33 ; GFXBANK 03
 
 ;===================================================================================================
-
+; Format:
+; db $ZB, <raw data>
+;   Z - number of $00s to write
+;   B - number of bytes of raw databytes to copy
+;===================================================================================================
 ReadIndoorTilemapHighBits:
 #_E4FB: LDY.b $87
 
@@ -21278,8 +21285,9 @@ ReadIndoorTilemapHighBits:
 #_E514: CPX.b #$78
 #_E516: BEQ .exit
 
-.find_first_unset
-#_E518: BCS .find_first_unset
+; !WTF - if X > $78, infinite loop
+.bad_data
+#_E518: BCS .bad_data
 
 #_E51A: LDA.w PPUDATA
 #_E51D: STA.b $1F
@@ -21288,35 +21296,35 @@ ReadIndoorTilemapHighBits:
 #_E520: LSR A
 #_E521: LSR A
 #_E522: LSR A
-#_E523: BEQ .do_copy
+#_E523: BEQ .no_zeros
 
 #_E525: STA.b $1E
 
 #_E527: LDA.b #$00
 
-.clear
+.write_zeros
 #_E529: STA.w $0120,X
 
 #_E52C: INX
 
 #_E52D: DEC.b $1E
-#_E52F: BNE .clear
+#_E52F: BNE .write_zeros
 
-.do_copy
+.no_zeros
 #_E531: LDA.b $1F
 #_E533: AND.b #$0F
 #_E535: BEQ .next
 
 #_E537: STA.b $1E
 
-.copy_next
+.raw_copy
 #_E539: LDA.w PPUDATA
 #_E53C: STA.w $0120,X
 
 #_E53F: INX
 
 #_E540: DEC.b $1E
-#_E542: BNE .copy_next
+#_E542: BNE .raw_copy
 
 #_E544: BEQ .next
 
@@ -21326,22 +21334,22 @@ ReadIndoorTilemapHighBits:
 ;===================================================================================================
 
 TilemapHighBitPointers:
-#_E547: dw CastleTilemapHighBits_high_bits_00
-#_E549: dw CastleTilemapHighBits_high_bits_01
-#_E54B: dw CastleTilemapHighBits_high_bits_02
-#_E54D: dw CastleTilemapHighBits_high_bits_03
-#_E54F: dw CastleTilemapHighBits_high_bits_04
-#_E551: dw CastleTilemapHighBits_high_bits_05
-#_E553: dw CastleTilemapHighBits_high_bits_06
-#_E555: dw CastleTilemapHighBits_high_bits_07
-#_E557: dw CastleTilemapHighBits_high_bits_08
-#_E559: dw CastleTilemapHighBits_high_bits_09
-#_E55B: dw CastleTilemapHighBits_high_bits_0A
-#_E55D: dw CastleTilemapHighBits_high_bits_0B
-#_E55F: dw CastleTilemapHighBits_high_bits_0C
-#_E561: dw CastleTilemapHighBits_high_bits_0D
-#_E563: dw CastleTilemapHighBits_high_bits_0E
-#_E565: dw CastleTilemapHighBits_high_bits_0F
+#_E547: dw CastleTilemapHighBits_high_bits_01
+#_E549: dw CastleTilemapHighBits_high_bits_02
+#_E54B: dw CastleTilemapHighBits_high_bits_03
+#_E54D: dw CastleTilemapHighBits_high_bits_04
+#_E54F: dw CastleTilemapHighBits_high_bits_05
+#_E551: dw CastleTilemapHighBits_high_bits_06
+#_E553: dw CastleTilemapHighBits_high_bits_07
+#_E555: dw CastleTilemapHighBits_high_bits_08
+#_E557: dw CastleTilemapHighBits_high_bits_09
+#_E559: dw CastleTilemapHighBits_high_bits_0A
+#_E55B: dw CastleTilemapHighBits_high_bits_0B
+#_E55D: dw CastleTilemapHighBits_high_bits_0C
+#_E55F: dw CastleTilemapHighBits_high_bits_0D
+#_E561: dw CastleTilemapHighBits_high_bits_0E
+#_E563: dw CastleTilemapHighBits_high_bits_0F
+#_E565: dw CastleTilemapHighBits_high_bits_10
 
 ;===================================================================================================
 

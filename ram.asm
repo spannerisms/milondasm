@@ -26,10 +26,15 @@ JOYMOD          = $0009 ; seems to handle forced joypad changes
 ; FREE RAM: 0x01
 UNUSED_0A       = $000A
 
-UNKNOWN_000B    = $000B
-UNKNOWN_000C    = $000C
-UNKNOWN_000D    = $000D
-UNKNOWN_000E    = $000E
+; Used to ORA VRAM addresses for tilemap updates
+NMTBL           = $000B
+
+; Scratch pace for VRAM addresses
+VMATMPL         = $000C
+VMATMPH         = $000D
+
+; Used to preserve tile name for a single routine
+CHRTMP          = $000E
 
 SCRATCH0F       = $000F
 SCRATCH10       = $0010
@@ -71,17 +76,15 @@ SCRATCH20       = $0020
 SCRATCH21       = $0021
 SCRATCH22       = $0022
 SCRATCH23       = $0023
+SCRATCH24       = $0024
 
-; Used as some kinda scratch in movement code TODO
-UNKNOWN_0024    = $0024
+; Used mostly in room draw code
+SCRATCH25       = $0025
+SCRATCH26       = $0026
+SCRATCH27       = $0027
 
-; Used together as temp variables in some code TODO
-UNKNOWN_0025    = $0025
-UNKNOWN_0026    = $0026
-UNKNOWN_0027    = $0027
-
-; Used as something with milon coordinates TODO
-UNKNOWN_0028    = $0028
+; Used like SCRTY, but for drawing
+SCRTYD          = $0028
 
 ; Parameters, especially for tile map stuff
 TMARGX          = $0029
@@ -567,7 +570,7 @@ FREQL           = $00DD
 FREQH           = $00DE
 
 ; Scratch used for music
-SCRATCH_DF      = $00DF
+SNDTMP          = $00DF
 
 ; Channel base volume
 CH1VOL          = $00E0
@@ -578,9 +581,9 @@ CH3VOL          = $00E2
 CHX             = $00E3
 
 ; Flags song being ended via command
-SONGOVER        = $00E4
+SONGEND         = $00E4
 
-; General scratch for music, but also holds the track byte
+; General scratch for music, but often holds the track byte
 CHTB            = $00E5
 
 ; SFX and previous SFX
@@ -707,10 +710,10 @@ SPRID           = $06C0
 ROWTILEQ        = $06D0
 ROWPALSQ        = $06F0
 
-;---------------------------------------------------------------------------------------------------
-
 ; FREE RAM: 0x18
 UNUSED_06F0     = $06F8
+
+;---------------------------------------------------------------------------------------------------
 
 ; Bubble variables
 BUBVARS0        = $0710
@@ -718,6 +721,7 @@ BUBVARS1        = $0716
 BUBVARS2        = $071C
 
 ; Tile flagging (0x78 bytes)
+; Flagging is coordinate based and shared between all rooms
 TILEFLAG        = $0722
 
 ; Items
@@ -780,7 +784,7 @@ KEYFLAG         = $07BF
 NOTEMOD         = $07C0
 
 ; Written to with room ID once; never read
-JUNK07C1        = $07C1
+JUNK_07C1       = $07C1
 
 ; Room ID of where a subroom was entered from
 TOPROOM         = $07C2

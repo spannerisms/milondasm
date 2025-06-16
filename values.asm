@@ -164,8 +164,8 @@
 ; 0B - Bonus stage!
 ; 0C - Bubble cutscene
 ; 0D - Bonus stage - Drums
-; 0E - Bonus stage - Euphonium/Ocarina
-; 0F - Bonus stage - Harp/Trumpet
+; 0E - Bonus stage - Euphonium+Ocarina
+; 0F - Bonus stage - Harp+Trumpet
 ; 10 - Bonus stage - Violin
 ; 11 - Fanfare
 ; 12 - Boss stage
@@ -176,7 +176,7 @@
 ; 00 - Nothing
 ; 01 - Spring
 ; 02 - Milon jump
-; 03 - Some collection thing (verify which)
+; 03 - Some dingaling, seems unused
 ; 04 - Fire blast
 ; 05 - Break block
 ; 06 - Push block / Open boss door
